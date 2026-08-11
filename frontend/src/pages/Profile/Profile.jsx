@@ -26,12 +26,12 @@ function Profile() {
             <div className="profile-info">
               <div>
                 <span>Name</span>
-                <strong>Hasini Reddy</strong>
+                <strong>Priya</strong>
               </div>
 
               <div>
                 <span>Email</span>
-                <strong>hasiniambati@gmail.com</strong>
+                <strong>priya@gmail.com</strong>
               </div>
             </div>
 
