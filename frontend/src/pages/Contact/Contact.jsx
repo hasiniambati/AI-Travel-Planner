@@ -44,7 +44,7 @@ function Contact() {
 
           <p className="contact-email">
             Or email us directly:
-            <a href="mailto:hasiniambati200@gmail.com">
+            <a href="mailto:priya@gmail.com">
               hasiniambati200@gmail.com
             </a>
           </p>
