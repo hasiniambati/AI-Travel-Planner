@@ -1,0 +1,39 @@
+.footer{
+
+background:#0f172a;
+
+color:#fff;
+
+padding:60px 20px;
+
+text-align:center;
+
+}
+
+.footer h2{
+
+font-size:2rem;
+
+margin-bottom:20px;
+
+}
+
+.footer p{
+
+max-width:650px;
+
+margin:auto;
+
+line-height:1.8;
+
+opacity:.8;
+
+}
+
+.copyright{
+
+margin-top:35px;
+
+opacity:.6;
+
+}

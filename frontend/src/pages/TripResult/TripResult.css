@@ -1,0 +1,87 @@
+.trip-result{
+
+padding:130px 8% 80px;
+
+background:#f8fbff;
+
+min-height:100vh;
+
+}
+
+.trip-header{
+
+text-align:center;
+
+margin-bottom:60px;
+
+}
+
+.trip-header h1{
+
+font-size:3rem;
+
+margin-bottom:20px;
+
+}
+
+.trip-header p{
+
+color:#64748b;
+
+font-size:1.1rem;
+
+}
+
+.timeline{
+
+display:flex;
+
+flex-direction:column;
+
+gap:35px;
+
+}
+
+.timeline-card{
+
+background:white;
+
+padding:30px;
+
+border-radius:20px;
+
+box-shadow:0 8px 20px rgba(0,0,0,.08);
+
+}
+
+.day{
+
+display:inline-block;
+
+background:#2563eb;
+
+color:white;
+
+padding:8px 20px;
+
+border-radius:30px;
+
+margin-bottom:20px;
+
+font-weight:600;
+
+}
+
+.timeline-card h2{
+
+margin-bottom:20px;
+
+}
+
+.timeline-card ul{
+
+padding-left:20px;
+
+line-height:2;
+
+}

@@ -1,0 +1,105 @@
+.places-page{
+
+padding:130px 8% 80px;
+
+background:#f8fbff;
+
+min-height:100vh;
+
+}
+
+.places-header{
+
+text-align:center;
+
+margin-bottom:40px;
+
+}
+
+.places-header h1{
+
+font-size:3rem;
+
+margin-bottom:20px;
+
+}
+
+.places-header p{
+
+max-width:700px;
+
+margin:auto;
+
+color:#666;
+
+line-height:1.8;
+
+margin-bottom:30px;
+
+}
+
+.places-header input{
+
+width:100%;
+
+max-width:500px;
+
+padding:16px;
+
+border-radius:10px;
+
+border:1px solid #ddd;
+
+font-size:1rem;
+
+}
+
+.category-buttons{
+
+display:flex;
+
+justify-content:center;
+
+gap:15px;
+
+flex-wrap:wrap;
+
+margin-bottom:50px;
+
+}
+
+.category-buttons button{
+
+padding:12px 24px;
+
+background:white;
+
+border:1px solid #2563eb;
+
+color:#2563eb;
+
+border-radius:30px;
+
+cursor:pointer;
+
+transition:.3s;
+
+}
+
+.category-buttons button:hover{
+
+background:#2563eb;
+
+color:white;
+
+}
+
+.places-grid{
+
+display:grid;
+
+grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+
+gap:35px;
+
+}

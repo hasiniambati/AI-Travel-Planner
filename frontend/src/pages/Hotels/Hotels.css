@@ -1,0 +1,170 @@
+.hotels-page {
+  background: #f6f8fc;
+  min-height: 100vh;
+  padding-bottom: 50px;
+}
+
+.hotels-header {
+  background: #1e3a8a;
+  color: white;
+  text-align: center;
+  padding: 100px 20px 100px;
+}
+
+.hotels-header h1 {
+  font-size: 40px;
+  margin-bottom: 10px;
+}
+
+.hotels-header p {
+  margin-bottom: 30px;
+  color: #dbeafe;
+}
+
+.hotel-search {
+  max-width: 900px;
+  margin: auto;
+  background: white;
+  padding: 15px;
+  border-radius: 12px;
+  display: flex;
+  gap: 10px;
+}
+
+.hotel-search input {
+  flex: 1;
+  padding: 13px;
+  border: 1px solid #ddd;
+  border-radius: 7px;
+}
+
+.hotel-search button {
+  padding: 0 25px;
+  border: none;
+  border-radius: 7px;
+  background: #2563eb;
+  color: white;
+  cursor: pointer;
+}
+
+.hotel-section {
+  max-width: 1100px;
+  margin: -50px auto 0;
+  padding: 0 20px;
+  position: relative;
+}
+
+.section-top {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+.section-top h2 {
+  margin: 0 0 5px;
+}
+
+.section-top p {
+  margin: 0;
+  color: #777;
+}
+
+.section-top select {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 7px;
+}
+
+.hotel-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 22px;
+}
+
+.hotel-card {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+.hotel-card img {
+  width: 100%;
+  height: 210px;
+  object-fit: cover;
+  display: block;
+}
+
+.hotel-info {
+  padding: 18px;
+}
+
+.hotel-info h3 {
+  margin: 0 0 8px;
+  font-size: 20px;
+}
+
+.location {
+  color: #777;
+  font-size: 14px;
+}
+
+.hotel-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 20px 0;
+}
+
+.rating {
+  background: #eff6ff;
+  color: #2563eb;
+  padding: 7px 10px;
+  border-radius: 6px;
+}
+
+.hotel-bottom strong {
+  font-size: 20px;
+}
+
+.hotel-bottom small {
+  color: #777;
+}
+
+.view-btn {
+  width: 100%;
+  padding: 11px;
+  border: none;
+  border-radius: 7px;
+  background: #1e3a8a;
+  color: white;
+  cursor: pointer;
+}
+
+.view-btn:hover {
+  background: #2563eb;
+}
+
+@media (max-width: 800px) {
+  .hotel-search {
+    flex-direction: column;
+  }
+
+  .hotel-search button {
+    padding: 13px;
+  }
+
+  .hotel-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .section-top {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+}
