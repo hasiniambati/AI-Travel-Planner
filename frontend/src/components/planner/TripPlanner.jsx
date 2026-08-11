@@ -52,7 +52,9 @@ const recommendations=[
             "🚗 Local Transport",
             "🌦 Weather Forecast",
             "💰 Budget Breakdown",
-            "🎒 Packing Checklist"
+            "🎒 Packing Checklist",
+            "🗺 Map & Directions",
+            "🌴Nearby Places"
 ];
 
 
