@@ -124,6 +124,10 @@ function Hotels() {
                 <button className="view-btn">
                   View Hotel
                 </button>
+                
+                <button className="book-btn">
+                  Book Now
+                </button>
 
               </div>
 
