@@ -17,7 +17,7 @@ import "./App.css";
 
 function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename="/AI-Travel-Planner">
       <Routes>
 
         <Route path="/" element={<Home />} />
