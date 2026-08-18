@@ -1,8 +1,20 @@
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import { FaPlaneDeparture, FaUserCircle } from "react-icons/fa";
+
+import { useAuth } from "../../context/AuthContext.jsx";
+
 import "./Navbar.css";
 
 function Navbar() {
+
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate("/");
+  };
+
   return (
     <header className="navbar">
 
@@ -33,19 +45,53 @@ function Navbar() {
 
       <div className="nav-buttons">
 
-        <Link to="/login" className="login-btn">
-          Login
-        </Link>
+        {!user ? (
 
-        <Link to="/register" className="signup-btn">
-          Sign Up
-        </Link>
+          <>
+            <Link
+              to="/login"
+              className="login-btn"
+            >
+              Login
+            </Link>
 
-        <Link to="/profile" className="profile">
+            <Link
+              to="/register"
+              className="signup-btn"
+            >
+              Sign Up
+            </Link>
+          </>
 
-          <FaUserCircle />
+        ) : (
 
-        </Link>
+          <>
+
+            <Link
+              to="/dashboard"
+              className="login-btn"
+            >
+              Dashboard
+            </Link>
+
+            <Link
+              to="/profile"
+              className="profile"
+              title="Profile"
+            >
+              <FaUserCircle />
+            </Link>
+
+            <button
+              className="logout-btn"
+              onClick={handleLogout}
+            >
+              Logout
+            </button>
+
+          </>
+
+        )}
 
       </div>
 

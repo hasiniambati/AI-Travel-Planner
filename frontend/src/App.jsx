@@ -13,11 +13,14 @@ import Profile from "./pages/Profile/Profile";
 import Dashboard from "./pages/Dashboard/Dashboard";
 import Features from "./pages/Features/Features";
 
+import ProtectedRoute from "./components/ProtectedRoute";
+
 import "./App.css";
 
 function App() {
   return (
     <BrowserRouter basename="/AI-Travel-Planner">
+
       <Routes>
 
         <Route path="/" element={<Home />} />
@@ -40,11 +43,26 @@ function App() {
 
         <Route path="/register" element={<Register />} />
 
-        <Route path="/profile" element={<Profile />} />
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          }
+        />
 
-        <Route path="/dashboard" element={<Dashboard />} />
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute>
+              <Profile />
+            </ProtectedRoute>
+          }
+        />
 
       </Routes>
+
     </BrowserRouter>
   );
 }
