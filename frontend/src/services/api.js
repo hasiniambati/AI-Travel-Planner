@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:5000/api";
+const API_URL = "https://ai-travel-planner-ofol.onrender.com/api";
 
 const apiRequest = async (endpoint, options = {}) => {
   const token = localStorage.getItem("token");
@@ -51,6 +51,45 @@ export const updateProfile = (userData) => {
   return apiRequest("/users/profile", {
     method: "PUT",
     body: JSON.stringify(userData)
+  });
+};
+
+export const getHotels = (search = "", sort = "") => {
+  const params = new URLSearchParams();
+
+  if (search) {
+    params.append("search", search);
+  }
+
+  if (sort) {
+    params.append("sort", sort);
+  }
+
+  const query = params.toString();
+
+  return apiRequest(
+    `/hotels${query ? `?${query}` : ""}`
+  );
+};
+
+export const getHotelById = (id) => {
+  return apiRequest(`/hotels/${id}`);
+};
+
+export const createBooking = (bookingData) => {
+  return apiRequest("/bookings", {
+    method: "POST",
+    body: JSON.stringify(bookingData)
+  });
+};
+
+export const getMyBookings = () => {
+  return apiRequest("/bookings/my");
+};
+
+export const cancelBooking = (id) => {
+  return apiRequest(`/bookings/${id}/cancel`, {
+    method: "PUT"
   });
 };
 

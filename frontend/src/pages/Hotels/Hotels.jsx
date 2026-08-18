@@ -1,7 +1,15 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 import Navbar from "../../components/layout/Navbar";
 import Footer from "../../components/layout/Footer";
-import "./Hotels.css";
+
+import {
+  getHotels,
+  createBooking
+} from "../../services/api.js";
+
+import { useAuth } from "../../context/AuthContext.jsx";
 
 import hotel1 from "../../assets/hotels/hotel1.jpg";
 import hotel2 from "../../assets/hotels/hotel2.jpg";
@@ -10,109 +18,118 @@ import hotel4 from "../../assets/hotels/hotel4.jpg";
 import hotel5 from "../../assets/hotels/hotel5.jpg";
 import hotel6 from "../../assets/hotels/hotel6.jpg";
 
-const hotels = [
-  {
-    name: "Taj Krishna",
-    location: "Hyderabad, Telangana",
-    city: "Hyderabad",
-    rating: 4.6,
-    price: 8500,
-    image: hotel1,
-    description:
-      "A luxurious stay in Hyderabad with comfortable rooms, excellent dining and premium hospitality.",
-  },
-  {
-    name: "ITC Grand Chola",
-    location: "Chennai, Tamil Nadu",
-    city: "Chennai",
-    rating: 4.7,
-    price: 12000,
-    image: hotel2,
-    description:
-      "A premium luxury hotel in Chennai offering elegant rooms, restaurants and world-class facilities.",
-  },
-  {
-    name: "The Leela Palace Bengaluru",
-    location: "Bangalore, Karnataka",
-    city: "Bangalore",
-    rating: 4.7,
-    price: 14000,
-    image: hotel3,
-    description:
-      "Experience luxury and comfort in the heart of Bangalore with premium rooms and excellent services.",
-  },
-  {
-    name: "Taj Lake Palace",
-    location: "Udaipur, Rajasthan",
-    city: "Udaipur",
-    rating: 4.8,
-    price: 18000,
-    image: hotel4,
-    description:
-      "A beautiful luxury property surrounded by the waters of Lake Pichola in Udaipur.",
-  },
-  {
-    name: "The Oberoi Rajvilas",
-    location: "Jaipur, Rajasthan",
-    city: "Jaipur",
-    rating: 4.8,
-    price: 20000,
-    image: hotel5,
-    description:
-      "A luxurious resort in Jaipur inspired by the rich heritage and architecture of Rajasthan.",
-  },
-  {
-    name: "Taj Exotica Resort & Spa",
-    location: "Goa, India",
-    city: "Goa",
-    rating: 4.7,
-    price: 15000,
-    image: hotel6,
-    description:
-      "A relaxing beach resort in Goa offering beautiful surroundings, comfortable rooms and premium facilities.",
-  },
-];
+import "./Hotels.css";
+
+const hotelImages = {
+  "hotel1.jpg": hotel1,
+  "hotel2.jpg": hotel2,
+  "hotel3.jpg": hotel3,
+  "hotel4.jpg": hotel4,
+  "hotel5.jpg": hotel5,
+  "hotel6.jpg": hotel6
+};
 
 function Hotels() {
+  const navigate = useNavigate();
+
+  const { user } = useAuth();
+
+  const [hotels, setHotels] = useState([]);
+
   const [search, setSearch] = useState("");
-  const [searchText, setSearchText] = useState("");
-  const [sort, setSort] = useState("Recommended");
+
+  const [sort, setSort] = useState("");
+
+  const [loading, setLoading] = useState(true);
+
+  const [error, setError] = useState("");
 
   const [selectedHotel, setSelectedHotel] = useState(null);
+
   const [bookingHotel, setBookingHotel] = useState(null);
 
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
+  const [checkIn, setCheckIn] = useState("");
+
+  const [checkOut, setCheckOut] = useState("");
+
+  const [guests, setGuests] = useState(1);
+
+  const [bookingLoading, setBookingLoading] = useState(false);
+
+  const loadHotels = async () => {
+    try {
+      setLoading(true);
+      setError("");
+
+      const data = await getHotels(search, sort);
+
+      setHotels(data.hotels);
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadHotels();
+  }, [sort]);
 
   const handleSearch = (e) => {
     e.preventDefault();
-    setSearch(searchText.trim());
+
+    loadHotels();
   };
 
-  const handleSort = (e) => {
-    setSort(e.target.value);
-  };
+  const handleBook = async () => {
+    if (!user) {
+      setBookingHotel(null);
 
-  let filteredHotels = hotels.filter((hotel) =>
-    `${hotel.name} ${hotel.location} ${hotel.city}`
-      .toLowerCase()
-      .includes(search.toLowerCase())
-  );
+      alert("Please login before booking a hotel.");
 
-  if (sort === "Price Low to High") {
-    filteredHotels.sort((a, b) => a.price - b.price);
-  }
+      navigate("/login");
 
-  if (sort === "Price High to Low") {
-    filteredHotels.sort((a, b) => b.price - a.price);
-  }
+      return;
+    }
 
-  if (sort === "Highest Rated") {
-    filteredHotels.sort((a, b) => b.rating - a.rating);
-  }
+    if (!checkIn || !checkOut) {
+      alert("Please select check-in and check-out dates.");
 
-  const handleBook = (hotel) => {
-    setBookingHotel(hotel);
+      return;
+    }
+
+    if (new Date(checkOut) <= new Date(checkIn)) {
+      alert("Check-out date must be after check-in date.");
+
+      return;
+    }
+
+    try {
+      setBookingLoading(true);
+
+      const data = await createBooking({
+        hotelId: bookingHotel._id,
+        checkIn,
+        checkOut,
+        guests: Number(guests)
+      });
+
+      alert(
+        `Booking confirmed!\n\n${data.booking.hotelName}\nTotal: ₹${data.booking.totalPrice.toLocaleString(
+          "en-IN"
+        )}`
+      );
+
+      setBookingHotel(null);
+
+      setCheckIn("");
+      setCheckOut("");
+      setGuests(1);
+    } catch (error) {
+      alert(error.message);
+    } finally {
+      setBookingLoading(false);
+    }
   };
 
   return (
@@ -136,21 +153,21 @@ function Hotels() {
 
             <input
               type="text"
-              placeholder="Enter destination"
-              value={searchText}
-              onChange={(e) => setSearchText(e.target.value)}
+              placeholder="Enter destination or hotel"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
             />
 
             <input
               type="date"
-              value={startDate}
-              onChange={(e) => setStartDate(e.target.value)}
+              value={checkIn}
+              onChange={(e) => setCheckIn(e.target.value)}
             />
 
             <input
               type="date"
-              value={endDate}
-              onChange={(e) => setEndDate(e.target.value)}
+              value={checkOut}
+              onChange={(e) => setCheckOut(e.target.value)}
             />
 
             <button type="submit">
@@ -166,133 +183,165 @@ function Hotels() {
           <div className="section-top">
 
             <div>
-
-              <h2>
-                {search
-                  ? `Hotels in "${search}"`
-                  : "Recommended Hotels"}
-              </h2>
+              <h2>Recommended Hotels</h2>
 
               <p>
-                {filteredHotels.length} hotel
-                {filteredHotels.length !== 1 ? "s" : ""} found
+                {hotels.length} hotel
+                {hotels.length !== 1 ? "s" : ""} found
               </p>
-
             </div>
 
             <select
               value={sort}
-              onChange={handleSort}
+              onChange={(e) => setSort(e.target.value)}
             >
-              <option>Recommended</option>
-              <option>Price Low to High</option>
-              <option>Price High to Low</option>
-              <option>Highest Rated</option>
+
+              <option value="">
+                Recommended
+              </option>
+
+              <option value="price-low">
+                Price Low to High
+              </option>
+
+              <option value="price-high">
+                Price High to Low
+              </option>
+
+              <option value="rating">
+                Highest Rated
+              </option>
+
             </select>
 
           </div>
 
-          {filteredHotels.length === 0 ? (
-
+          {loading && (
             <div className="no-hotels">
-
-              <h2>No hotels found</h2>
-
-              <p>
-                Try searching for Goa, Hyderabad, Chennai,
-                Bangalore, Udaipur or Jaipur.
-              </p>
-
-              <button
-                onClick={() => {
-                  setSearch("");
-                  setSearchText("");
-                }}
-              >
-                Show All Hotels
-              </button>
-
+              <h2>Loading hotels...</h2>
             </div>
+          )}
 
-          ) : (
+          {error && (
+            <div className="no-hotels">
+              <h2>Unable to load hotels</h2>
 
-            <div className="hotel-grid">
+              <p>{error}</p>
 
-              {filteredHotels.map((hotel) => (
+              <button onClick={loadHotels}>
+                Try Again
+              </button>
+            </div>
+          )}
 
-                <div
-                  className="hotel-card"
-                  key={hotel.name}
+          {!loading &&
+            !error &&
+            hotels.length === 0 && (
+
+              <div className="no-hotels">
+
+                <h2>No hotels found</h2>
+
+                <p>
+                  Try another destination.
+                </p>
+
+                <button
+                  onClick={() => {
+                    setSearch("");
+                    loadHotels();
+                  }}
                 >
+                  Show All Hotels
+                </button>
 
-                  <img
-                    src={hotel.image}
-                    alt={hotel.name}
-                  />
+              </div>
 
-                  <div className="hotel-info">
+            )}
 
-                    <h3>{hotel.name}</h3>
+          {!loading &&
+            !error &&
+            hotels.length > 0 && (
 
-                    <p className="location">
-                      📍 {hotel.location}
-                    </p>
+              <div className="hotel-grid">
 
-                    <div className="hotel-bottom">
+                {hotels.map((hotel) => (
 
-                      <span className="rating">
-                        ⭐ {hotel.rating}
-                      </span>
+                  <div
+                    className="hotel-card"
+                    key={hotel._id}
+                  >
 
-                      <div>
-                        <strong>
-                          ₹{hotel.price.toLocaleString("en-IN")}
-                        </strong>
+                    <img
+                      src={hotelImages[hotel.image]}
+                      alt={hotel.name}
+                    />
 
-                        <small>
-                          {" "} / night
-                        </small>
+                    <div className="hotel-info">
+
+                      <h3>
+                        {hotel.name}
+                      </h3>
+
+                      <p className="location">
+                        📍 {hotel.location}
+                      </p>
+
+                      <div className="hotel-bottom">
+
+                        <span className="rating">
+                          ⭐ {hotel.rating}
+                        </span>
+
+                        <div>
+                          <strong>
+                            ₹{hotel.price.toLocaleString("en-IN")}
+                          </strong>
+
+                          <small>
+                            {" "}/ night
+                          </small>
+                        </div>
+
                       </div>
 
-                    </div>
+                      <div className="hotel-buttons">
 
-                    <div className="hotel-buttons">
+                        <button
+                          className="view-btn"
+                          onClick={() =>
+                            setSelectedHotel(hotel)
+                          }
+                        >
+                          View Hotel
+                        </button>
 
-                      <button
-                        className="view-btn"
-                        onClick={() =>
-                          setSelectedHotel(hotel)
-                        }
-                      >
-                        View Hotel
-                      </button>
+                        <button
+                          className="book-btn"
+                          onClick={() =>
+                            setBookingHotel(hotel)
+                          }
+                        >
+                          Book Now
+                        </button>
 
-                      <button
-                        className="book-btn"
-                        onClick={() =>
-                          handleBook(hotel)
-                        }
-                      >
-                        Book Now
-                      </button>
+                      </div>
 
                     </div>
 
                   </div>
 
-                </div>
+                ))}
 
-              ))}
+              </div>
 
-            </div>
-
-          )}
+            )}
 
         </section>
 
       </div>
 
-      {/* HOTEL DETAILS MODAL */}
+      {/* HOTEL DETAILS */}
 
       {selectedHotel && (
 
@@ -314,38 +363,38 @@ function Hotels() {
             </button>
 
             <img
-              src={selectedHotel.image}
+              src={hotelImages[selectedHotel.image]}
               alt={selectedHotel.name}
             />
 
-            <h2>{selectedHotel.name}</h2>
+            <h2>
+              {selectedHotel.name}
+            </h2>
 
             <p>
               📍 {selectedHotel.location}
             </p>
 
             <p>
-              ⭐ {selectedHotel.rating} Rating
+              ⭐ {selectedHotel.rating} / 5
             </p>
 
             <h3>
               ₹{selectedHotel.price.toLocaleString("en-IN")}
-              <small> / night</small>
+              {" "}/ night
             </h3>
 
             <p>
               {selectedHotel.description}
             </p>
 
-            <button
-              className="book-btn"
-              onClick={() => {
-                setSelectedHotel(null);
-                setBookingHotel(selectedHotel);
-              }}
-            >
-              Book This Hotel
-            </button>
+            <h3>
+              Amenities
+            </h3>
+
+            <p>
+              {selectedHotel.amenities?.join(" • ")}
+            </p>
 
           </div>
 
@@ -353,7 +402,7 @@ function Hotels() {
 
       )}
 
-      {/* BOOKING MODAL */}
+      {/* BOOKING */}
 
       {bookingHotel && (
 
@@ -374,49 +423,71 @@ function Hotels() {
               ✕
             </button>
 
-            <h2>🏨 Booking Request</h2>
+            <h2>
+              🏨 Book Your Stay
+            </h2>
 
-            <p>
-              You selected:
-            </p>
-
-            <h3>{bookingHotel.name}</h3>
+            <h3>
+              {bookingHotel.name}
+            </h3>
 
             <p>
               📍 {bookingHotel.location}
             </p>
 
-            {startDate && endDate ? (
+            <div className="booking-form">
 
-              <p>
-                📅 {startDate} → {endDate}
-              </p>
+              <label>
+                Check-in
 
-            ) : (
+                <input
+                  type="date"
+                  value={checkIn}
+                  onChange={(e) =>
+                    setCheckIn(e.target.value)
+                  }
+                />
 
-              <p>
-                Please select your travel dates before booking.
-              </p>
+              </label>
 
-            )}
+              <label>
+                Check-out
 
-            <p>
-              💰 ₹{bookingHotel.price.toLocaleString("en-IN")}
-              {" "} / night
-            </p>
+                <input
+                  type="date"
+                  value={checkOut}
+                  onChange={(e) =>
+                    setCheckOut(e.target.value)
+                  }
+                />
 
-            <button
-              className="book-btn"
-              onClick={() => {
-                alert(
-                  `Booking request submitted for ${bookingHotel.name}!`
-                );
+              </label>
 
-                setBookingHotel(null);
-              }}
-            >
-              Confirm Booking
-            </button>
+              <label>
+                Number of Guests
+
+                <input
+                  type="number"
+                  min="1"
+                  value={guests}
+                  onChange={(e) =>
+                    setGuests(e.target.value)
+                  }
+                />
+
+              </label>
+
+              <button
+                className="book-confirm-btn"
+                onClick={handleBook}
+                disabled={bookingLoading}
+              >
+                {bookingLoading
+                  ? "Booking..."
+                  : "Confirm Booking"}
+              </button>
+
+            </div>
 
           </div>
 
@@ -425,7 +496,6 @@ function Hotels() {
       )}
 
       <Footer />
-
     </>
   );
 }
