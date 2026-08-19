@@ -1,307 +1,649 @@
 .hotels-page {
-  background: #f6f8fc;
   min-height: 100vh;
-  padding-bottom: 50px;
+  background: #f6f8fc;
 }
 
+
+/* =====================================================
+   HEADER
+===================================================== */
+
 .hotels-header {
-  background: #1e3a8a;
-  color: white;
   text-align: center;
-  padding: 100px 20px 100px;
+  padding: 75px 20px 65px;
+  background:
+    linear-gradient(
+      135deg,
+      #172554 0%,
+      #1e40af 50%,
+      #4f46e5 100%
+    );
+  color: white;
 }
 
 .hotels-header h1 {
-  font-size: 40px;
-  margin-bottom: 10px;
+  margin: 0;
+  font-size: 42px;
+  font-weight: 800;
+  letter-spacing: -1px;
 }
 
 .hotels-header p {
-  margin-bottom: 30px;
+  margin: 12px 0 30px;
   color: #dbeafe;
+  font-size: 17px;
 }
 
+
+/* =====================================================
+   SEARCH
+===================================================== */
+
 .hotel-search {
-  max-width: 900px;
+  width: min(680px, 100%);
   margin: auto;
-  background: white;
-  padding: 15px;
-  border-radius: 12px;
   display: flex;
-  gap: 10px;
+  padding: 6px;
+  background: white;
+  border-radius: 14px;
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.2);
 }
 
 .hotel-search input {
   flex: 1;
-  padding: 13px;
-  border: 1px solid #ddd;
-  border-radius: 7px;
+  min-width: 0;
+  padding: 15px 18px;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: #1f2937;
+  font-size: 15px;
+}
+
+.hotel-search input::placeholder {
+  color: #9ca3af;
 }
 
 .hotel-search button {
-  padding: 0 25px;
+  padding: 0 28px;
   border: none;
-  border-radius: 7px;
+  border-radius: 10px;
   background: #2563eb;
   color: white;
+  font-size: 15px;
+  font-weight: 600;
   cursor: pointer;
+  transition: 0.2s ease;
 }
+
+.hotel-search button:hover {
+  background: #1d4ed8;
+  transform: translateY(-1px);
+}
+
+
+/* =====================================================
+   HOTEL SECTION
+===================================================== */
 
 .hotel-section {
-  max-width: 1100px;
-  margin: -50px auto 0;
-  padding: 0 20px;
+  width: min(1200px, calc(100% - 40px));
+  margin: -25px auto 0;
+  padding: 32px;
+  background: white;
+  border-radius: 18px;
   position: relative;
+  box-shadow: 0 10px 35px rgba(15, 23, 42, 0.08);
 }
 
+
+/* =====================================================
+   SECTION TOP
+===================================================== */
+
 .section-top {
-  background: white;
-  padding: 20px;
-  border-radius: 12px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 25px;
+  gap: 20px;
+  margin-bottom: 30px;
 }
 
 .section-top h2 {
-  margin: 0 0 5px;
+  margin: 0 0 6px;
+  color: #111827;
+  font-size: 25px;
 }
 
 .section-top p {
   margin: 0;
-  color: #777;
+  color: #6b7280;
+  font-size: 14px;
 }
 
 .section-top select {
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 7px;
+  min-width: 190px;
+  padding: 11px 14px;
+  border: 1px solid #dbe1ea;
+  border-radius: 9px;
+  background: white;
+  color: #374151;
+  outline: none;
+  cursor: pointer;
 }
+
+.section-top select:focus {
+  border-color: #2563eb;
+}
+
+
+/* =====================================================
+   HOTEL GRID
+===================================================== */
 
 .hotel-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 22px;
+  gap: 24px;
 }
+
+
+/* =====================================================
+   HOTEL CARD
+===================================================== */
 
 .hotel-card {
-  background: white;
-  border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  background: white;
+  border: 1px solid #e8ecf2;
+  border-radius: 15px;
+  box-shadow: 0 6px 20px rgba(15, 23, 42, 0.07);
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
 }
 
-.hotel-card img {
+.hotel-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 14px 30px rgba(15, 23, 42, 0.13);
+}
+
+.hotel-card > img {
+  display: block;
   width: 100%;
   height: 210px;
   object-fit: cover;
-  display: block;
 }
 
+
+/* =====================================================
+   HOTEL INFO
+===================================================== */
+
 .hotel-info {
-  padding: 18px;
+  padding: 20px;
 }
 
 .hotel-info h3 {
   margin: 0 0 8px;
+  color: #111827;
   font-size: 20px;
+  font-weight: 700;
 }
 
 .location {
-  color: #777;
+  margin: 0 0 20px;
+  color: #6b7280;
   font-size: 14px;
 }
+
+
+/* =====================================================
+   PRICE + RATING
+===================================================== */
 
 .hotel-bottom {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin: 20px 0;
+  padding-top: 15px;
+  border-top: 1px solid #edf0f4;
 }
 
 .rating {
-  background: #eff6ff;
-  color: #2563eb;
-  padding: 7px 10px;
-  border-radius: 6px;
+  color: #374151;
+  font-size: 14px;
+  font-weight: 600;
 }
 
 .hotel-bottom strong {
-  font-size: 20px;
+  color: #111827;
+  font-size: 19px;
 }
 
 .hotel-bottom small {
-  color: #777;
+  color: #6b7280;
+  font-size: 12px;
+}
+
+
+/* =====================================================
+   HOTEL BUTTONS
+===================================================== */
+
+.hotel-buttons {
+  display: flex;
+  gap: 10px;
+  margin-top: 18px;
 }
 
 .view-btn,
 .book-btn {
   flex: 1;
-  width: auto;
-  padding: 11px;
+  min-height: 42px;
   border: none;
-  border-radius: 7px;
-  background: #1e3a8a;
-  color: white;
-  cursor: pointer;
-}
-
-.view-btn:hover,
-.book-btn:hover {
-  background: #2563eb;
-}
-.button-container {
-  display: flex;
-  gap: 15px;
-}
-
-
-.booking-form {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  margin-top: 20px;
-  text-align: left;
-}
-
-.booking-form label {
-  display: flex;
-  flex-direction: column;
-  gap: 7px;
-  font-weight: 600;
-}
-
-.booking-form input {
-  padding: 11px;
-  border: 1px solid #ddd;
-  border-radius: 7px;
+  border-radius: 9px;
   font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s ease;
 }
 
-.book-confirm-btn {
-  width: 100%;
-  padding: 12px;
+.view-btn {
+  background: #eef2ff;
+  color: #3730a3;
+}
+
+.view-btn:hover {
+  background: #e0e7ff;
+}
+
+.book-btn {
+  background: #2563eb;
+  color: white;
+}
+
+.book-btn:hover {
+  background: #1d4ed8;
+}
+
+.book-btn:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+
+/* =====================================================
+   NO HOTELS / ERROR
+===================================================== */
+
+.no-hotels {
+  text-align: center;
+  padding: 70px 20px;
+}
+
+.no-hotels h3 {
+  margin: 0 0 10px;
+  color: #111827;
+  font-size: 21px;
+}
+
+.no-hotels p {
+  margin: 0 0 20px;
+  color: #6b7280;
+}
+
+.no-hotels button {
+  padding: 11px 20px;
   border: none;
   border-radius: 8px;
   background: #2563eb;
   color: white;
-  font-size: 15px;
+  font-weight: 600;
   cursor: pointer;
-  margin-top: 5px;
 }
 
-.book-confirm-btn:hover {
-  background: #1e3a8a;
-}
 
-.hotel-buttons {
+/* =====================================================
+   MODAL OVERLAY
+===================================================== */
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+
   display: flex;
-  gap: 10px;
-  margin-top: 15px;
+  align-items: center;
+  justify-content: center;
+
+  padding: 20px;
+
+  background: rgba(15, 23, 42, 0.72);
+  backdrop-filter: blur(5px);
 }
 
-.hotel-buttons button {
-  flex: 1;
-  width: auto;
-  margin: 0;
+
+/* =====================================================
+   MODAL
+===================================================== */
+
+.hotel-modal {
+  position: relative;
+  width: min(520px, 100%);
+  max-height: 90vh;
+  overflow-y: auto;
+
+  background: white;
+  border-radius: 18px;
+
+  box-shadow:
+    0 25px 70px rgba(0, 0, 0, 0.3);
+
+  animation: modalAppear 0.2s ease;
 }
-@media (max-width: 800px) {
+
+@keyframes modalAppear {
+  from {
+    opacity: 0;
+    transform: translateY(15px) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+
+/* =====================================================
+   MODAL IMAGE
+===================================================== */
+
+.hotel-modal > img {
+  display: block;
+  width: 100%;
+  height: 260px;
+  object-fit: cover;
+}
+
+
+/* =====================================================
+   MODAL CONTENT
+===================================================== */
+
+.hotel-modal h2 {
+  margin: 0;
+  padding: 24px 26px 8px;
+  color: #111827;
+  font-size: 27px;
+}
+
+.hotel-modal p {
+  margin: 7px 26px;
+  color: #4b5563;
+  line-height: 1.55;
+}
+
+.hotel-modal h3 {
+  margin: 12px 26px;
+  color: #111827;
+  font-size: 21px;
+}
+
+
+/* =====================================================
+   AMENITIES
+===================================================== */
+
+.hotel-modal h4 {
+  margin: 20px 26px 10px;
+  color: #111827;
+  font-size: 16px;
+}
+
+.hotel-modal ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+
+  margin: 0;
+  padding: 0 26px 25px;
+
+  list-style: none;
+}
+
+.hotel-modal li {
+  padding: 7px 11px;
+  background: #eef2ff;
+  color: #3730a3;
+  border-radius: 20px;
+  font-size: 13px;
+}
+
+
+/* =====================================================
+   CLOSE BUTTON
+===================================================== */
+
+.close-modal {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+
+  z-index: 5;
+
+  width: 38px;
+  height: 38px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: none;
+  border-radius: 50%;
+
+  background: rgba(255, 255, 255, 0.95);
+  color: #374151;
+
+  font-size: 19px;
+  cursor: pointer;
+
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.15);
+}
+
+.close-modal:hover {
+  background: white;
+  color: #111827;
+}
+
+
+/* =====================================================
+   BOOKING MODAL
+===================================================== */
+
+/*
+   The booking modal does not have an image,
+   so give it proper padding.
+*/
+
+.hotel-modal:not(:has(> img)) {
+  padding: 28px;
+}
+
+.hotel-modal:not(:has(> img)) h2 {
+  padding: 0;
+  margin: 0 35px 8px 0;
+}
+
+.hotel-modal:not(:has(> img)) p {
+  margin: 5px 0 25px;
+}
+
+
+/* =====================================================
+   BOOKING FORM
+===================================================== */
+
+.hotel-modal label {
+  display: block;
+  margin-bottom: 17px;
+
+  color: #374151;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.hotel-modal label input {
+  display: block;
+
+  width: 100%;
+  box-sizing: border-box;
+
+  margin-top: 7px;
+
+  padding: 12px 13px;
+
+  border: 1px solid #d1d5db;
+  border-radius: 9px;
+
+  background: #f9fafb;
+
+  color: #111827;
+
+  font-size: 14px;
+
+  outline: none;
+}
+
+.hotel-modal label input:focus {
+  border-color: #2563eb;
+  background: white;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+
+/* Remove old <br> spacing */
+
+.hotel-modal label + br {
+  display: none;
+}
+
+
+/* =====================================================
+   CONFIRM BOOKING BUTTON
+===================================================== */
+
+.hotel-modal > .book-btn {
+  width: 100%;
+  margin-top: 8px;
+
+  min-height: 46px;
+
+  font-size: 15px;
+}
+
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media (max-width: 900px) {
+
+  .hotel-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+}
+
+
+@media (max-width: 650px) {
+
+  .hotels-header {
+    padding: 55px 15px 50px;
+  }
+
+  .hotels-header h1 {
+    font-size: 32px;
+  }
+
   .hotel-search {
     flex-direction: column;
+    padding: 8px;
+    gap: 8px;
+  }
+
+  .hotel-search input {
+    padding: 14px;
   }
 
   .hotel-search button {
-    padding: 13px;
+    min-height: 44px;
+  }
+
+  .hotel-section {
+    width: calc(100% - 24px);
+    padding: 20px 15px;
+  }
+
+  .section-top {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .section-top select {
+    width: 100%;
   }
 
   .hotel-grid {
     grid-template-columns: 1fr;
   }
 
-  .section-top {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 15px;
+  .hotel-modal {
+    max-height: 92vh;
   }
-}
-.hotel-buttons {
-  display: flex;
-  gap: 10px;
-  margin-top: 15px;
-}
 
-.hotel-buttons button {
-  flex: 1;
-}
+  .hotel-modal > img {
+    height: 210px;
+  }
 
-.modal-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.6);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 9999;
-  padding: 20px;
 }
+/* =====================================================
+   VIEW MODAL BOOK BUTTON
+===================================================== */
 
-.hotel-modal {
-  position: relative;
-  background: white;
-  width: 450px;
-  max-width: 100%;
-  padding: 25px;
-  border-radius: 18px;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
-  text-align: center;
-}
+.modal-book-btn {
+  display: block;
+  width: calc(100% - 52px);
+  margin: 0 26px 26px;
+  padding: 14px 20px;
 
-.hotel-modal img {
-  width: 100%;
-  height: 220px;
-  object-fit: cover;
-  border-radius: 12px;
-  margin-bottom: 15px;
-}
-
-.hotel-modal h2 {
-  margin-bottom: 10px;
-}
-
-.hotel-modal p {
-  margin: 8px 0;
-}
-
-.hotel-modal h3 {
-  margin: 15px 0;
-}
-
-.close-modal {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  width: 35px;
-  height: 35px;
   border: none;
-  border-radius: 50%;
-  background: white;
-  font-size: 18px;
-  cursor: pointer;
-  z-index: 2;
-}
+  border-radius: 10px;
 
-.no-hotels {
-  text-align: center;
-  padding: 60px 20px;
-}
+  background: linear-gradient(
+    135deg,
+    #2563eb,
+    #4f46e5
+  );
 
-.no-hotels button {
-  margin-top: 15px;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 8px;
-  background: #2563eb;
   color: white;
+  font-size: 15px;
+  font-weight: 700;
+
   cursor: pointer;
+
+  box-shadow: 0 8px 20px rgba(37, 99, 235, 0.25);
+
+  transition: all 0.2s ease;
+}
+
+.modal-book-btn:hover {
+  transform: translateY(-2px);
+
+  box-shadow: 0 12px 25px rgba(37, 99, 235, 0.35);
+}
+
+.modal-book-btn:active {
+  transform: translateY(0);
 }

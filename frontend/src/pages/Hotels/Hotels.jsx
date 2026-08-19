@@ -20,6 +20,7 @@ import hotel6 from "../../assets/hotels/hotel6.jpg";
 
 import "./Hotels.css";
 
+
 const hotelImages = {
   "hotel1.jpg": hotel1,
   "hotel2.jpg": hotel2,
@@ -29,122 +30,339 @@ const hotelImages = {
   "hotel6.jpg": hotel6
 };
 
+
 function Hotels() {
+
   const navigate = useNavigate();
 
   const { user } = useAuth();
+
+
+  // ------------------------------------------
+  // HOTEL DATA
+  // ------------------------------------------
 
   const [hotels, setHotels] = useState([]);
 
   const [search, setSearch] = useState("");
 
+  const [activeSearch, setActiveSearch] = useState("");
+
   const [sort, setSort] = useState("");
+
+
+  // ------------------------------------------
+  // UI
+  // ------------------------------------------
 
   const [loading, setLoading] = useState(true);
 
   const [error, setError] = useState("");
 
-  const [selectedHotel, setSelectedHotel] = useState(null);
 
-  const [bookingHotel, setBookingHotel] = useState(null);
+  // ------------------------------------------
+  // MODALS
+  // ------------------------------------------
 
-  const [checkIn, setCheckIn] = useState("");
+  const [selectedHotel, setSelectedHotel] =
+    useState(null);
 
-  const [checkOut, setCheckOut] = useState("");
+  const [bookingHotel, setBookingHotel] =
+    useState(null);
 
-  const [guests, setGuests] = useState(1);
 
-  const [bookingLoading, setBookingLoading] = useState(false);
+  // ------------------------------------------
+  // BOOKING
+  // ------------------------------------------
 
-  const loadHotels = async () => {
+  const [checkIn, setCheckIn] =
+    useState("");
+
+  const [checkOut, setCheckOut] =
+    useState("");
+
+  const [guests, setGuests] =
+    useState(1);
+
+  const [bookingLoading, setBookingLoading] =
+    useState(false);
+
+
+  // ------------------------------------------
+  // GET IMAGE
+  // ------------------------------------------
+
+  const getHotelImage = (hotel) => {
+
+    if (!hotel?.image) {
+      return null;
+    }
+
+
+    const fileName =
+      hotel.image
+        .split("/")
+        .pop();
+
+
+    return hotelImages[fileName] || null;
+  };
+
+
+  // ------------------------------------------
+  // LOAD HOTELS
+  // ------------------------------------------
+
+  const loadHotels = async (
+    searchValue = "",
+    sortValue = ""
+  ) => {
+
     try {
+
       setLoading(true);
+
       setError("");
 
-      const data = await getHotels(search, sort);
 
-      setHotels(data.hotels);
-    } catch (error) {
-      setError(error.message);
+      const data =
+        await getHotels(
+          searchValue,
+          sortValue
+        );
+
+
+      setHotels(
+        Array.isArray(data.hotels)
+          ? data.hotels
+          : []
+      );
+
+
+    } catch (err) {
+
+      console.error(
+        "Hotel error:",
+        err
+      );
+
+      setHotels([]);
+
+      setError(
+        err.message ||
+        "Failed to load hotels"
+      );
+
+
     } finally {
+
       setLoading(false);
+
     }
+
   };
+
+
+  // ------------------------------------------
+  // INITIAL LOAD
+  // ------------------------------------------
 
   useEffect(() => {
-    loadHotels();
-  }, [sort]);
 
-  const handleSearch = (e) => {
+    loadHotels();
+
+  }, []);
+
+
+  // ------------------------------------------
+  // SEARCH
+  // ------------------------------------------
+
+  const handleSearch = async (e) => {
+
     e.preventDefault();
 
-    loadHotels();
+
+    const value =
+      search.trim();
+
+
+    setActiveSearch(value);
+
+
+    await loadHotels(
+      value,
+      sort
+    );
+
   };
 
+
+  // ------------------------------------------
+  // CLEAR SEARCH
+  // ------------------------------------------
+
+  const handleClear = async () => {
+
+    setSearch("");
+
+    setActiveSearch("");
+
+
+    await loadHotels(
+      "",
+      sort
+    );
+
+  };
+
+
+  // ------------------------------------------
+  // SORT
+  // ------------------------------------------
+
+  const handleSort = async (e) => {
+
+    const value =
+      e.target.value;
+
+
+    setSort(value);
+
+
+    await loadHotels(
+      activeSearch,
+      value
+    );
+
+  };
+
+
+  // ------------------------------------------
+  // BOOK HOTEL
+  // ------------------------------------------
+
   const handleBook = async () => {
+
     if (!user) {
+
       setBookingHotel(null);
 
-      alert("Please login before booking a hotel.");
+      alert(
+        "Please login before booking a hotel."
+      );
 
       navigate("/login");
 
       return;
     }
 
+
     if (!checkIn || !checkOut) {
-      alert("Please select check-in and check-out dates.");
-
-      return;
-    }
-
-    if (new Date(checkOut) <= new Date(checkIn)) {
-      alert("Check-out date must be after check-in date.");
-
-      return;
-    }
-
-    try {
-      setBookingLoading(true);
-
-      const data = await createBooking({
-        hotelId: bookingHotel._id,
-        checkIn,
-        checkOut,
-        guests: Number(guests)
-      });
 
       alert(
-        `Booking confirmed!\n\n${data.booking.hotelName}\nTotal: ₹${data.booking.totalPrice.toLocaleString(
-          "en-IN"
-        )}`
+        "Please select check-in and check-out dates."
       );
+
+      return;
+    }
+
+
+    if (
+      new Date(checkOut) <=
+      new Date(checkIn)
+    ) {
+
+      alert(
+        "Check-out date must be after check-in date."
+      );
+
+      return;
+    }
+
+
+    try {
+
+      setBookingLoading(true);
+
+
+      const data =
+        await createBooking({
+          hotelId:
+            bookingHotel._id,
+
+          checkIn,
+
+          checkOut,
+
+          guests:
+            Number(guests)
+        });
+
+
+      alert(
+        `Booking confirmed!\n\n${
+          data.booking.hotelName
+        }\nTotal: ₹${
+          Number(
+            data.booking.totalPrice
+          ).toLocaleString("en-IN")
+        }`
+      );
+
 
       setBookingHotel(null);
 
       setCheckIn("");
+
       setCheckOut("");
+
       setGuests(1);
-    } catch (error) {
-      alert(error.message);
+
+
+    } catch (err) {
+
+      alert(
+        err.message ||
+        "Booking failed"
+      );
+
+
     } finally {
+
       setBookingLoading(false);
+
     }
+
   };
+
+
+  // ------------------------------------------
+  // PAGE
+  // ------------------------------------------
 
   return (
     <>
       <Navbar />
 
-      <div className="hotels-page">
 
-        <div className="hotels-header">
+      <main className="hotels-page">
 
-          <h1>Find Your Perfect Stay</h1>
+
+        {/* HEADER */}
+
+        <section className="hotels-header">
+
+          <h1>
+            Find Your Perfect Hotel
+          </h1>
+
 
           <p>
-            Discover hotels that match your travel plans and budget.
+            Discover comfortable stays
+            for your next journey.
           </p>
+
 
           <form
             className="hotel-search"
@@ -153,22 +371,13 @@ function Hotels() {
 
             <input
               type="text"
-              placeholder="Enter destination or hotel"
               value={search}
-              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Search by hotel name or location..."
+              onChange={(e) =>
+                setSearch(e.target.value)
+              }
             />
 
-            <input
-              type="date"
-              value={checkIn}
-              onChange={(e) => setCheckIn(e.target.value)}
-            />
-
-            <input
-              type="date"
-              value={checkOut}
-              onChange={(e) => setCheckOut(e.target.value)}
-            />
 
             <button type="submit">
               Search
@@ -176,63 +385,116 @@ function Hotels() {
 
           </form>
 
-        </div>
+        </section>
+
+
+        {/* HOTEL SECTION */}
 
         <section className="hotel-section">
+
+
+          {/* TOP */}
 
           <div className="section-top">
 
             <div>
-              <h2>Recommended Hotels</h2>
+
+              <h2>
+
+                {activeSearch
+                  ? `Hotels for "${activeSearch}"`
+                  : "Popular Hotels"}
+
+              </h2>
+
 
               <p>
-                {hotels.length} hotel
-                {hotels.length !== 1 ? "s" : ""} found
+
+                {loading
+                  ? "Finding hotels..."
+                  : `${hotels.length} hotel${
+                      hotels.length !== 1
+                        ? "s"
+                        : ""
+                    } found`}
+
               </p>
+
             </div>
+
 
             <select
               value={sort}
-              onChange={(e) => setSort(e.target.value)}
+              onChange={handleSort}
             >
 
               <option value="">
-                Recommended
+                Sort By
               </option>
 
               <option value="price-low">
-                Price Low to High
+                Price: Low to High
               </option>
 
               <option value="price-high">
-                Price High to Low
+                Price: High to Low
               </option>
 
               <option value="rating">
-                Highest Rated
+                Rating
               </option>
 
             </select>
 
           </div>
 
-          {loading && (
-            <div className="no-hotels">
-              <h2>Loading hotels...</h2>
-            </div>
-          )}
+
+          {/* ERROR */}
 
           {error && (
+
             <div className="no-hotels">
-              <h2>Unable to load hotels</h2>
 
-              <p>{error}</p>
+              <h3>
+                Unable to load hotels
+              </h3>
 
-              <button onClick={loadHotels}>
+              <p>
+                {error}
+              </p>
+
+              <button
+                onClick={() =>
+                  loadHotels(
+                    activeSearch,
+                    sort
+                  )
+                }
+              >
                 Try Again
               </button>
+
             </div>
+
           )}
+
+
+          {/* LOADING */}
+
+          {loading && !error && (
+
+            <div className="no-hotels">
+
+              <h3>
+                Loading hotels...
+              </h3>
+
+            </div>
+
+          )}
+
+
+          {/* NO RESULTS */}
 
           {!loading &&
             !error &&
@@ -240,24 +502,34 @@ function Hotels() {
 
               <div className="no-hotels">
 
-                <h2>No hotels found</h2>
+                <h3>
+                  No hotels found
+                </h3>
+
 
                 <p>
-                  Try another destination.
+                  {activeSearch
+                    ? `No hotels match "${activeSearch}".`
+                    : "No hotels are available."}
                 </p>
 
-                <button
-                  onClick={() => {
-                    setSearch("");
-                    loadHotels();
-                  }}
-                >
-                  Show All Hotels
-                </button>
+
+                {activeSearch && (
+
+                  <button
+                    onClick={handleClear}
+                  >
+                    Show All Hotels
+                  </button>
+
+                )}
 
               </div>
 
             )}
+
+
+          {/* HOTEL CARDS */}
 
           {!loading &&
             !error &&
@@ -265,73 +537,103 @@ function Hotels() {
 
               <div className="hotel-grid">
 
-                {hotels.map((hotel) => (
+                {hotels.map((hotel) => {
 
-                  <div
-                    className="hotel-card"
-                    key={hotel._id}
-                  >
+                  const image =
+                    getHotelImage(hotel);
 
-                    <img
-                      src={hotelImages[hotel.image]}
-                      alt={hotel.name}
-                    />
 
-                    <div className="hotel-info">
+                  return (
 
-                      <h3>
-                        {hotel.name}
-                      </h3>
+                    <article
+                      className="hotel-card"
+                      key={hotel._id}
+                    >
 
-                      <p className="location">
-                        📍 {hotel.location}
-                      </p>
+                      {image && (
 
-                      <div className="hotel-bottom">
+                        <img
+                          src={image}
+                          alt={hotel.name}
+                        />
 
-                        <span className="rating">
-                          ⭐ {hotel.rating}
-                        </span>
+                      )}
 
-                        <div>
-                          <strong>
-                            ₹{hotel.price.toLocaleString("en-IN")}
-                          </strong>
 
-                          <small>
-                            {" "}/ night
-                          </small>
+                      <div className="hotel-info">
+
+                        <h3>
+                          {hotel.name}
+                        </h3>
+
+
+                        <p className="location">
+                          📍 {hotel.location}
+                        </p>
+
+
+                        <div className="hotel-bottom">
+
+                          <span className="rating">
+                            ⭐ {hotel.rating}
+                          </span>
+
+
+                          <div>
+
+                            <strong>
+                              ₹
+                              {Number(
+                                hotel.price
+                              ).toLocaleString(
+                                "en-IN"
+                              )}
+                            </strong>
+
+
+                            <small>
+                              / night
+                            </small>
+
+                          </div>
+
+                        </div>
+
+
+                        <div className="hotel-buttons">
+
+                          <button
+                            className="view-btn"
+                            onClick={() =>
+                              setSelectedHotel(
+                                hotel
+                              )
+                            }
+                          >
+                            View
+                          </button>
+
+
+                          <button
+                            className="book-btn"
+                            onClick={() =>
+                              setBookingHotel(
+                                hotel
+                              )
+                            }
+                          >
+                            Book
+                          </button>
+
                         </div>
 
                       </div>
 
-                      <div className="hotel-buttons">
+                    </article>
 
-                        <button
-                          className="view-btn"
-                          onClick={() =>
-                            setSelectedHotel(hotel)
-                          }
-                        >
-                          View Hotel
-                        </button>
+                  );
 
-                        <button
-                          className="book-btn"
-                          onClick={() =>
-                            setBookingHotel(hotel)
-                          }
-                        >
-                          Book Now
-                        </button>
-
-                      </div>
-
-                    </div>
-
-                  </div>
-
-                ))}
+                })}
 
               </div>
 
@@ -339,103 +641,131 @@ function Hotels() {
 
         </section>
 
-      </div>
 
-      {/* HOTEL DETAILS */}
+{/* VIEW HOTEL MODAL */}
 
-      {selectedHotel && (
+{selectedHotel && (
+  <div
+    className="modal-overlay"
+    onClick={() => setSelectedHotel(null)}
+  >
+    <div
+      className="hotel-modal"
+      onClick={(e) => e.stopPropagation()}
+    >
+      <button
+        className="close-modal"
+        onClick={() => setSelectedHotel(null)}
+      >
+        ✕
+      </button>
 
-        <div
-          className="modal-overlay"
-          onClick={() => setSelectedHotel(null)}
-        >
-
-          <div
-            className="hotel-modal"
-            onClick={(e) => e.stopPropagation()}
-          >
-
-            <button
-              className="close-modal"
-              onClick={() => setSelectedHotel(null)}
-            >
-              ✕
-            </button>
-
-            <img
-              src={hotelImages[selectedHotel.image]}
-              alt={selectedHotel.name}
-            />
-
-            <h2>
-              {selectedHotel.name}
-            </h2>
-
-            <p>
-              📍 {selectedHotel.location}
-            </p>
-
-            <p>
-              ⭐ {selectedHotel.rating} / 5
-            </p>
-
-            <h3>
-              ₹{selectedHotel.price.toLocaleString("en-IN")}
-              {" "}/ night
-            </h3>
-
-            <p>
-              {selectedHotel.description}
-            </p>
-
-            <h3>
-              Amenities
-            </h3>
-
-            <p>
-              {selectedHotel.amenities?.join(" • ")}
-            </p>
-
-          </div>
-
-        </div>
-
+      {/* HOTEL IMAGE */}
+      {hotelImages[
+        selectedHotel.image?.split("/").pop()
+      ] && (
+        <img
+          src={
+            hotelImages[
+              selectedHotel.image?.split("/").pop()
+            ]
+          }
+          alt={selectedHotel.name}
+        />
       )}
 
-      {/* BOOKING */}
+      {/* HOTEL DETAILS */}
+      <h2>{selectedHotel.name}</h2>
 
-      {bookingHotel && (
+      <p>
+        📍 {selectedHotel.location}
+      </p>
 
-        <div
-          className="modal-overlay"
-          onClick={() => setBookingHotel(null)}
-        >
+      <p>
+        ⭐ {selectedHotel.rating}
+      </p>
+
+      <h3>
+        ₹
+        {Number(selectedHotel.price).toLocaleString("en-IN")}
+        {" "}
+        / night
+      </h3>
+
+      {/* DESCRIPTION */}
+      {selectedHotel.description && (
+        <p className="hotel-description">
+          {selectedHotel.description}
+        </p>
+      )}
+
+      {/* AMENITIES */}
+      {selectedHotel.amenities?.length > 0 && (
+        <>
+          <h4>Amenities</h4>
+
+          <ul>
+            {selectedHotel.amenities.map((amenity, index) => (
+              <li key={index}>
+                {amenity}
+              </li>
+            ))}
+          </ul>
+        </>
+      )}
+
+      {/* BOOK NOW */}
+      <button
+        className="modal-book-btn"
+        onClick={() => {
+          setSelectedHotel(null);
+          setBookingHotel(selectedHotel);
+        }}
+      >
+        🏨 Book Now
+      </button>
+    </div>
+  </div>
+)}
+
+
+        {/* BOOKING MODAL */}
+
+        {bookingHotel && (
 
           <div
-            className="hotel-modal"
-            onClick={(e) => e.stopPropagation()}
+            className="modal-overlay"
+            onClick={() =>
+              setBookingHotel(null)
+            }
           >
 
-            <button
-              className="close-modal"
-              onClick={() => setBookingHotel(null)}
+            <div
+              className="hotel-modal"
+              onClick={(e) =>
+                e.stopPropagation()
+              }
             >
-              ✕
-            </button>
 
-            <h2>
-              🏨 Book Your Stay
-            </h2>
+              <button
+                className="close-modal"
+                onClick={() =>
+                  setBookingHotel(null)
+                }
+              >
+                ✕
+              </button>
 
-            <h3>
-              {bookingHotel.name}
-            </h3>
 
-            <p>
-              📍 {bookingHotel.location}
-            </p>
+              <h2>
+                Book {bookingHotel.name}
+              </h2>
 
-            <div className="booking-form">
+
+              <p>
+                📍 {bookingHotel.location}
+              </p>
+
 
               <label>
                 Check-in
@@ -444,11 +774,14 @@ function Hotels() {
                   type="date"
                   value={checkIn}
                   onChange={(e) =>
-                    setCheckIn(e.target.value)
+                    setCheckIn(
+                      e.target.value
+                    )
                   }
                 />
 
               </label>
+
 
               <label>
                 Check-out
@@ -457,47 +790,58 @@ function Hotels() {
                   type="date"
                   value={checkOut}
                   onChange={(e) =>
-                    setCheckOut(e.target.value)
+                    setCheckOut(
+                      e.target.value
+                    )
                   }
                 />
 
               </label>
 
+
               <label>
-                Number of Guests
+                Guests
 
                 <input
                   type="number"
                   min="1"
                   value={guests}
                   onChange={(e) =>
-                    setGuests(e.target.value)
+                    setGuests(
+                      e.target.value
+                    )
                   }
                 />
 
               </label>
 
+
               <button
-                className="book-confirm-btn"
+                className="book-btn"
                 onClick={handleBook}
                 disabled={bookingLoading}
               >
+
                 {bookingLoading
                   ? "Booking..."
                   : "Confirm Booking"}
+
               </button>
 
             </div>
 
           </div>
 
-        </div>
+        )}
 
-      )}
+      </main>
+
 
       <Footer />
+
     </>
   );
 }
+
 
 export default Hotels;

@@ -1,11 +1,17 @@
 import Hotel from "../models/Hotel.js";
 
+// GET /api/hotels
+// GET /api/hotels?search=Goa
+// GET /api/hotels?sort=price-low
+
 export const getHotels = async (req, res) => {
   try {
-    const { search, sort } = req.query;
+    const search = (req.query.search || "").trim();
+    const sort = req.query.sort || "";
 
     let query = {};
 
+    // Search by hotel name OR location
     if (search) {
       query = {
         $or: [
@@ -25,29 +31,43 @@ export const getHotels = async (req, res) => {
       };
     }
 
+    // Sorting
     let sortOption = {};
 
     if (sort === "price-low") {
-      sortOption.price = 1;
-    } else if (sort === "price-high") {
-      sortOption.price = -1;
-    } else if (sort === "rating") {
-      sortOption.rating = -1;
+      sortOption = { price: 1 };
     }
 
-    const hotels = await Hotel.find(query).sort(sortOption);
+    if (sort === "price-high") {
+      sortOption = { price: -1 };
+    }
 
-    res.json({
+    if (sort === "rating") {
+      sortOption = { rating: -1 };
+    }
+
+    const hotels = await Hotel
+      .find(query)
+      .sort(sortOption);
+
+    res.status(200).json({
+      success: true,
+      count: hotels.length,
       hotels
     });
+
   } catch (error) {
-    console.error("Get Hotels Error:", error);
+    console.error("GET HOTELS ERROR:", error);
 
     res.status(500).json({
+      success: false,
       message: "Failed to get hotels"
     });
   }
 };
+
+
+// GET /api/hotels/:id
 
 export const getHotelById = async (req, res) => {
   try {
@@ -55,17 +75,21 @@ export const getHotelById = async (req, res) => {
 
     if (!hotel) {
       return res.status(404).json({
+        success: false,
         message: "Hotel not found"
       });
     }
 
-    res.json({
+    res.status(200).json({
+      success: true,
       hotel
     });
+
   } catch (error) {
-    console.error("Get Hotel Error:", error);
+    console.error("GET HOTEL BY ID ERROR:", error);
 
     res.status(500).json({
+      success: false,
       message: "Failed to get hotel"
     });
   }

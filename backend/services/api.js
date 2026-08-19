@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:5000/api";
+const API_URL = "https://ai-travel-planner-ofol.onrender.com/api";
 
 const apiRequest = async (endpoint, options = {}) => {
   const token = localStorage.getItem("token");
@@ -7,9 +7,11 @@ const apiRequest = async (endpoint, options = {}) => {
     ...options,
     headers: {
       "Content-Type": "application/json",
+
       ...(token && {
         Authorization: `Bearer ${token}`
       }),
+
       ...options.headers
     }
   });
@@ -23,7 +25,45 @@ const apiRequest = async (endpoint, options = {}) => {
   return data;
 };
 
-// Register
+export const getHotels = (search = "", sort = "") => {
+  const params = new URLSearchParams();
+
+  if (search.trim()) {
+    params.append("search", search.trim());
+  }
+
+  if (sort) {
+    params.append("sort", sort);
+  }
+
+  const query = params.toString();
+
+  return apiRequest(
+    `/hotels${query ? `?${query}` : ""}`
+  );
+};
+
+export const getHotelById = (id) => {
+  return apiRequest(`/hotels/${id}`);
+};
+
+export const createBooking = (bookingData) => {
+  return apiRequest("/bookings", {
+    method: "POST",
+    body: JSON.stringify(bookingData)
+  });
+};
+
+export const getMyBookings = () => {
+  return apiRequest("/bookings/my");
+};
+
+export const cancelBooking = (id) => {
+  return apiRequest(`/bookings/${id}/cancel`, {
+    method: "PUT"
+  });
+};
+
 export const registerUser = (userData) => {
   return apiRequest("/auth/register", {
     method: "POST",
@@ -31,7 +71,6 @@ export const registerUser = (userData) => {
   });
 };
 
-// Login
 export const loginUser = (userData) => {
   return apiRequest("/auth/login", {
     method: "POST",
@@ -39,11 +78,9 @@ export const loginUser = (userData) => {
   });
 };
 
-// Get logged-in user
 export const getCurrentUser = () => {
   return apiRequest("/auth/me");
 };
-
 
 export const getProfile = () => {
   return apiRequest("/users/profile");
