@@ -1,0 +1,10 @@
+import express from 'express';
+import authMiddleware from '../middleware/authMiddleware.js';
+import { generateTrip, assistantChat, saveTrip, getSavedTrips, deleteSavedTrip } from '../controllers/aiController.js';
+const router=express.Router();
+router.post('/plan',generateTrip);
+router.post('/chat',assistantChat);
+router.post('/trips',authMiddleware,saveTrip);
+router.get('/trips',authMiddleware,getSavedTrips);
+router.delete('/trips/:id',authMiddleware,deleteSavedTrip);
+export default router;
