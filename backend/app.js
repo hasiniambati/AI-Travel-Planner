@@ -1,6 +1,17 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
+
+// Catch silent asynchronous errors & unhandled rejections
+process.on("uncaughtException", (err) => {
+  console.error("❌ UNCAUGHT EXCEPTION:", err);
+});
+process.on("unhandledRejection", (reason, promise) => {
+  console.error("❌ UNHANDLED REJECTION:", reason);
+});
+
+dotenv.config();
+
 import connectDB from "./config/db.js";
 import authRoutes from "./routes/authRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
@@ -10,19 +21,28 @@ import placeRoutes from "./routes/placeRoutes.js";
 import aiRoutes from "./routes/aiRoutes.js";
 import weatherRoutes from "./routes/weatherRoutes.js";
 import contactRoutes from "./routes/contactRoutes.js";
-dotenv.config();
-const app=express();
+
+const app = express();
+
+// Connect Database
 connectDB();
-app.use(cors({origin:true,credentials:true}));
+
+// Middleware
+app.use(cors({ origin: true, credentials: true }));
 app.use(express.json());
-app.get("/",(req,res)=>res.json({success:true,message:"AI Travel Planner Backend is running"}));
-app.use("/api/auth",authRoutes);
-app.use("/api/users",userRoutes);
-app.use("/api/hotels",hotelRoutes);
-app.use("/api/bookings",bookingRoutes);
-app.use("/api/places",placeRoutes);
-app.use("/api/ai",aiRoutes);
-app.use("/api/weather",weatherRoutes);
-app.use("/api/contact",contactRoutes);
-const PORT=process.env.PORT||5000;
-app.listen(PORT,()=>console.log(`Server running on port ${PORT}`));
+
+// Routes
+app.get("/", (req, res) =>
+  res.json({ success: true, message: "AI Travel Planner Backend is running" })
+);
+app.use("/api/auth", authRoutes);
+app.use("/api/users", userRoutes);
+app.use("/api/hotels", hotelRoutes);
+app.use("/api/bookings", bookingRoutes);
+app.use("/api/places", placeRoutes);
+app.use("/api/ai", aiRoutes);
+app.use("/api/weather", weatherRoutes);
+app.use("/api/contact", contactRoutes);
+
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
