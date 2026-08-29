@@ -1,0 +1,149 @@
+.app {
+  width: 100%;
+}
+
+/* Offset for fixed navbar to prevent overlapping starting content on pages */
+.trip-result,
+.planner-page,
+.contact-page,
+.features-page,
+.about-page,
+.profile-page,
+.auth-container {
+  padding-top: 80px !important;
+  box-sizing: border-box;
+}
+
+.dashboard-page,
+.places-real {
+  padding-top: 130px !important;
+  box-sizing: border-box;
+}
+
+/* Modal Overlay and Backdrop styling */
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(15, 23, 42, 0.6); /* slate-900 with opacity */
+  backdrop-filter: blur(4px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.modal {
+  background: white;
+  border-radius: 20px;
+  padding: 30px;
+  width: 100%;
+  max-width: 500px;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  position: relative;
+  z-index: 1001;
+  animation: modalScaleUp 0.3s ease-out;
+  box-sizing: border-box;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.modal.large {
+  max-width: 750px;
+}
+
+.modal h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0 0 15px 0;
+}
+
+.modal p {
+  color: #64748b;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  margin-bottom: 20px;
+}
+
+.modal label {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: #334155;
+  margin-bottom: 16px;
+}
+
+.modal input {
+  padding: 12px;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 10px;
+  font-size: 14.5px;
+  color: #0f172a;
+  outline: none;
+  font-family: inherit;
+  transition: border-color 0.2s;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.modal input:focus {
+  border-color: #4f46e5;
+}
+
+.modal button {
+  background: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 12px;
+  font-weight: 700;
+  font-size: 14.5px;
+  cursor: pointer;
+  transition: background 0.2s;
+  font-family: inherit;
+}
+
+.modal button:hover {
+  background: #1d4ed8;
+}
+
+.modal button:disabled {
+  background: #94a3b8;
+  cursor: not-allowed;
+}
+
+.modal .close {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  font-size: 28px;
+  font-weight: 400;
+  color: #94a3b8;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+}
+
+.modal .close:hover {
+  color: #475569;
+}
+
+@keyframes modalScaleUp {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}

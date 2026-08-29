@@ -1,0 +1,89 @@
+.about-page {
+  padding: 120px 8% 70px;
+  background: #f8fbff;
+  min-height: 100vh;
+}
+
+.about-container {
+  max-width: 1100px;
+  margin: auto;
+}
+
+.about-container h1 {
+  text-align: center;
+  font-size: 42px;
+  color: #16355c;
+  margin-bottom: 20px;
+}
+
+.about-container > p {
+  max-width: 800px;
+  margin: 0 auto 50px;
+  text-align: center;
+  color: #666;
+  line-height: 1.8;
+  font-size: 17px;
+}
+
+.about-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 25px;
+}
+
+.about-card {
+  background: white;
+  padding: 30px;
+  border-radius: 18px;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.08);
+}
+
+.about-card h2 {
+  color: #16355c;
+  font-size: 20px;
+  margin-bottom: 12px;
+}
+
+.about-card p {
+  color: #666;
+  line-height: 1.7;
+  margin: 0;
+}
+
+.about-action {
+  text-align: center;
+  margin-top: 50px;
+}
+
+.about-action h2 {
+  color: #16355c;
+  margin-bottom: 20px;
+}
+
+.about-btn {
+  padding: 12px 25px;
+  border: none;
+  border-radius: 8px;
+  background: #2563eb;
+  color: white;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.about-btn:hover {
+  background: #1d4ed8;
+}
+
+@media (max-width: 700px) {
+  .about-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .about-container h1 {
+    font-size: 32px;
+  }
+
+  .about-page {
+    padding: 100px 5% 60px;
+  }
+}

@@ -1,0 +1,132 @@
+.itinerary-container {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.trip-summary-panel {
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 24px;
+  border: 1px solid #eceef3;
+  box-shadow: 0 8px 28px rgba(31, 41, 55, 0.04);
+}
+
+.trip-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.summary-item {
+  background: #f8fafc;
+  padding: 14px;
+  border-radius: 12px;
+  border: 1px solid #f1f5f9;
+}
+
+.summary-item label {
+  display: block;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  color: #64748b;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.summary-item span {
+  font-size: 1rem;
+  color: #0f172a;
+  font-weight: 600;
+}
+
+.hotels-section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.hotels-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.itinerary-section {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.day-tabs {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.day-tab-btn {
+  background: #f1f5f9;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 30px;
+  font-weight: 600;
+  color: #475569;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.25s ease;
+}
+
+.day-tab-btn:hover {
+  background: #e2e8f0;
+}
+
+.day-tab-btn.active {
+  background: #4f46e5;
+  color: #ffffff;
+}
+
+.day-details-panel {
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 24px;
+  border: 1px solid #eceef3;
+  box-shadow: 0 8px 28px rgba(31, 41, 55, 0.04);
+}
+
+.day-theme {
+  color: #4f46e5;
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+.timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  position: relative;
+  padding-left: 20px;
+  border-left: 2px dashed #cbd5e1;
+  margin-top: 10px;
+}
+
+.timeline-item {
+  position: relative;
+}
+
+.timeline-dot {
+  position: absolute;
+  left: -27px;
+  top: 12px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #4f46e5;
+  border: 2px solid #ffffff;
+  box-shadow: 0 0 0 4px #eef2ff;
+}

@@ -1,0 +1,107 @@
+.travel-card {
+  background: #ffffff;
+  border-radius: 20px;
+  border: 1px solid #eceef3;
+  box-shadow: 0 8px 28px rgba(31, 41, 55, 0.05);
+  padding: 24px;
+  transition: transform 0.35s ease, box-shadow 0.35s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 12px;
+  position: relative;
+  overflow: hidden;
+}
+
+.travel-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 35px rgba(31, 41, 55, 0.1);
+}
+
+.travel-card-badge-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.travel-card-badge {
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: 20px;
+}
+
+.rating-badge {
+  background: #fff8eb;
+  color: #d97706;
+}
+
+.price-badge {
+  background: #eef2ff;
+  color: #4f46e5;
+  font-weight: 700;
+}
+
+.time-badge {
+  background: #f0fdf4;
+  color: #16a34a;
+}
+
+.travel-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex-grow: 1;
+}
+
+.travel-card-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #111827;
+  margin: 0;
+}
+
+.travel-card-address {
+  font-size: 0.9rem;
+  color: #667085;
+  margin: 0;
+}
+
+.map-link {
+  color: #4f46e5;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+.map-link:hover {
+  color: #312e81;
+  text-decoration: underline;
+}
+
+.travel-card-description {
+  font-size: 0.95rem;
+  color: #4b5563;
+  line-height: 1.6;
+  margin: 4px 0 0 0;
+}
+
+.travel-card-transit {
+  font-size: 0.85rem;
+  background: #f3f4f6;
+  color: #4b5563;
+  padding: 6px 12px;
+  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  align-self: flex-start;
+  margin: 2px 0;
+  font-weight: 500;
+}

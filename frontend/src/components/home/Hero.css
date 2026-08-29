@@ -1,0 +1,178 @@
+/* Remove default spacing globally */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
+/* Hero Section - Full Viewport Height */
+.hero {
+  height: 100vh;
+  min-height: 100vh;
+  width: 100%;
+
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+
+  position: relative;
+  overflow: hidden;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  margin: 0;
+  padding: 0;
+}
+
+/* Light background overlay */
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+
+  background: rgba(204, 200, 200, 0.423);
+
+  z-index: 1;
+}
+
+/* Hero content */
+.hero-content {
+  position: relative;
+  z-index: 2;
+
+  width: 100%;
+  max-width: 900px;
+
+  text-align: center;
+
+  padding: 20px;
+
+  margin-top: 70px;
+
+  animation: fadeUp 0.8s ease;
+}
+
+/* Heading */
+.hero-content h1 {
+  margin: 0 0 18px;
+
+  color: #24102d;
+
+  font-size: 4.1rem;
+  line-height: 1.08;
+
+  font-weight: 750;
+
+  letter-spacing: -1px;
+}
+
+/* Description */
+.hero-content p {
+  max-width: 800px;
+
+  margin: 0 auto 38px;
+
+  color: black;
+
+  font-size: 1.2rem;
+  line-height: 1.7;
+
+  font-weight: 400;
+}
+
+/* Start Planning button */
+.hero-btn {
+  display: inline-block;
+
+  padding: 17px 48px;
+
+  background: #6c58f3;
+  color: white;
+
+  border-radius: 30px;
+
+  text-decoration: none;
+
+  font-size: 1.15rem;
+  font-weight: 600;
+
+  transition: all 0.3s ease;
+}
+
+.hero-btn:hover {
+  background: #5845e8;
+
+  transform: translateY(-2px);
+
+  box-shadow: 0 6px 18px rgba(108, 88, 243, 0.3);
+}
+
+/* Prevent gap on all subsequent sections */
+section {
+  margin: 0;
+  padding: 0;
+}
+
+/* Prevent margin-collapse from headings inside following sections */
+section > h1:first-child,
+section > h2:first-child {
+  margin-top: 0;
+}
+
+/* Animation */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(25px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Tablet */
+@media (max-width: 768px) {
+  .hero {
+    height: 100vh;
+    min-height: 100vh;
+  }
+
+  .hero-content {
+    margin-top: 40px;
+  }
+
+  .hero-content h1 {
+    font-size: 3rem;
+  }
+
+  .hero-content p {
+    font-size: 1rem;
+  }
+
+  .hero-btn {
+    padding: 15px 38px;
+    font-size: 1rem;
+  }
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+  .hero-content h1 {
+    font-size: 2.4rem;
+  }
+
+  .hero-content p {
+    font-size: 0.95rem;
+  }
+}
