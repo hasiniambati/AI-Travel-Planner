@@ -114,7 +114,7 @@ export const generateTripWithGemini = async (formData) => {
 
 Please output strict JSON matching the required schema. Ensure the estimatedTravelCost estimate matches the budget level. Recommended hotels must be realistic stays in ${destination}. For each day in the itinerary, provide multiple activities structured by timeOfDay (e.g. Morning, Afternoon, Evening) with correct ticketing/pricing, best visit times, and realistic travel times from previous spots.`;
 
-  const url = `${API_BASE}/gemini-3.6-flash:generateContent?key=${encodeURIComponent(apiKey)}`;
+  const url = `${API_BASE}/gemini-1.5-flash:generateContent?key=${encodeURIComponent(apiKey)}`;
 
   const response = await fetch(url, {
     method: "POST",
@@ -221,7 +221,7 @@ Use this itinerary and trip details to answer follow-up questions accurately. Do
     parts: [{ text: message }]
   });
 
-  const url = `${API_BASE}/gemini-3.6-flash:generateContent?key=${encodeURIComponent(apiKey)}`;
+  const url = `${API_BASE}/gemini-1.5-flash:generateContent?key=${encodeURIComponent(apiKey)}`;
 
   const response = await fetch(url, {
     method: "POST",
