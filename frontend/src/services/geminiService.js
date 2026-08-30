@@ -1,4 +1,5 @@
 const API_BASE = "https://generativelanguage.googleapis.com/v1beta/models";
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
 const geminiSchema = {
   type: "object",
@@ -85,13 +86,6 @@ export const saveGeminiApiKey = (key) => {
 };
 
 export const generateTripWithGemini = async (formData) => {
-  const apiKey = getGeminiApiKey();
-  if (!apiKey) {
-    throw new Error(
-      "Gemini API Key is not set. Please provide it in your environment or configuration."
-    );
-  }
-
   const { origin, destination, startDate, endDate, budget, adults, children, infants, travelMode, interests = [], include = [] } = formData;
 
   const start = new Date(startDate);
@@ -114,32 +108,33 @@ export const generateTripWithGemini = async (formData) => {
 
 Please output strict JSON matching the required schema. Ensure the estimatedTravelCost estimate matches the budget level. Recommended hotels must be realistic stays in ${destination}. For each day in the itinerary, provide multiple activities structured by timeOfDay (e.g. Morning, Afternoon, Evening) with correct ticketing/pricing, best visit times, and realistic travel times from previous spots.`;
 
-  const url = `${API_BASE}/gemini-1.5-flash:generateContent?key=${encodeURIComponent(apiKey)}`;
-
-  const response = await fetch(url, {
+  const response = await fetch(`${API_URL}/ai/proxy-gemini`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
     },
     body: JSON.stringify({
-      contents: [
-        {
-          role: "user",
-          parts: [{ text: prompt }]
+      model: "gemini-1.5-flash",
+      body: {
+        contents: [
+          {
+            role: "user",
+            parts: [{ text: prompt }]
+          }
+        ],
+        generationConfig: {
+          temperature: 0.7,
+          maxOutputTokens: 4000,
+          responseMimeType: "application/json",
+          responseSchema: geminiSchema
         }
-      ],
-      generationConfig: {
-        temperature: 0.7,
-        maxOutputTokens: 4000,
-        responseMimeType: "application/json",
-        responseSchema: geminiSchema
       }
     })
   });
 
   if (!response.ok) {
     const errorData = await response.json().catch(() => ({}));
-    const errMsg = errorData?.error?.message || `API error (${response.status})`;
+    const errMsg = errorData?.message || errorData?.error?.message || `API error (${response.status})`;
     throw new Error(`Gemini API Error: ${errMsg}`);
   }
 
@@ -167,11 +162,6 @@ Please output strict JSON matching the required schema. Ensure the estimatedTrav
 };
 
 export const chatWithGeminiAPI = async (message, chatHistory = [], tripContext = null) => {
-  const apiKey = getGeminiApiKey();
-  if (!apiKey) {
-    throw new Error("API Key is missing. Please configure it in the form Settings first.");
-  }
-
   // Gemini expects: { role: 'user'|'model', parts: [{ text: string }] }
   const contents = [];
 
@@ -221,28 +211,29 @@ Use this itinerary and trip details to answer follow-up questions accurately. Do
     parts: [{ text: message }]
   });
 
-  const url = `${API_BASE}/gemini-1.5-flash:generateContent?key=${encodeURIComponent(apiKey)}`;
-
-  const response = await fetch(url, {
+  const response = await fetch(`${API_URL}/ai/proxy-gemini`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
     },
     body: JSON.stringify({
-      contents: contents,
-      systemInstruction: {
-        parts: [{ text: contextPrompt }]
-      },
-      generationConfig: {
-        temperature: 0.7,
-        maxOutputTokens: 2000
+      model: "gemini-1.5-flash",
+      body: {
+        contents: contents,
+        systemInstruction: {
+          parts: [{ text: contextPrompt }]
+        },
+        generationConfig: {
+          temperature: 0.7,
+          maxOutputTokens: 2000
+        }
       }
     })
   });
 
   if (!response.ok) {
     const errorData = await response.json().catch(() => ({}));
-    const errMsg = errorData?.error?.message || `API error (${response.status})`;
+    const errMsg = errorData?.message || errorData?.error?.message || `API error (${response.status})`;
     throw new Error(`Gemini API Error: ${errMsg}`);
   }
 

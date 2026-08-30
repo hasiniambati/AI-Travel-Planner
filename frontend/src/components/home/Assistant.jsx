@@ -31,18 +31,15 @@ export default function Assistant() {
     }
 
     try {
-      const activeKey = getGeminiApiKey();
-      // 1. Try client-side Gemini call first if API Key is configured
-      if (activeKey) {
-        const reply = await chatWithGeminiAPI(text, messages, tripContext);
-        setMessages((m) => [...m, { sender: "ai", text: reply }]);
-      } else {
-        // 2. If no client key, try calling the backend API (which might have GEMINI_API_KEY)
+      const reply = await chatWithGeminiAPI(text, messages, tripContext);
+      setMessages((m) => [...m, { sender: "ai", text: reply }]);
+    } catch (e) {
+      try {
         const d = await assistantChat(text, tripContext || { page: window.location.pathname });
         setMessages((m) => [...m, { sender: "ai", text: d.answer }]);
+      } catch (err) {
+        setMessages((m) => [...m, { sender: "ai", text: `I could not fetch a response: ${e.message}` }]);
       }
-    } catch (e) {
-      setMessages((m) => [...m, { sender: "ai", text: `I could not fetch a response: ${e.message}` }]);
     } finally {
       setLoading(false);
     }

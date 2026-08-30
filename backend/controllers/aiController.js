@@ -87,3 +87,47 @@ export const deleteSavedTrip = async (req, res) => {
   }
 };
 
+export const proxyGemini = async (req, res) => {
+  try {
+    const key = process.env.GEMINI_API_KEY;
+    if (!key || key.includes("PUT_YOUR") || key.startsWith("AQ.Ab8RN")) {
+      return res.status(400).json({
+        success: false,
+        message: "Gemini API Key is not set or is invalid on the server backend. Please configure GEMINI_API_KEY in your backend environment."
+      });
+    }
+
+    const { model, body } = req.body;
+    if (!model || !body) {
+      return res.status(400).json({
+        success: false,
+        message: "Model and body are required for Gemini proxy request"
+      });
+    }
+
+    const response = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${encodeURIComponent(key)}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(body)
+      }
+    );
+
+    const data = await response.json();
+    if (!response.ok) {
+      return res.status(response.status).json(data);
+    }
+
+    return res.json(data);
+  } catch (error) {
+    console.error("PROXY GEMINI ERROR:", error);
+    return res.status(500).json({
+      success: false,
+      message: error.message || "Gemini proxy failed"
+    });
+  }
+};
+
