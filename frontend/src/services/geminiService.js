@@ -71,7 +71,7 @@ const geminiSchema = {
 
 export const getGeminiApiKey = () => {
   const key = import.meta.env.VITE_GEMINI_API_KEY || localStorage.getItem("gemini_api_key") || "";
-  if (key && (key.startsWith("AQ.Ab8RN") || key.includes("YOUR_API_KEY") || key === "placeholder")) {
+  if (key && (key.includes("YOUR_API_KEY") || key === "placeholder")) {
     return "";
   }
   return key;
@@ -114,7 +114,7 @@ Please output strict JSON matching the required schema. Ensure the estimatedTrav
       "Content-Type": "application/json"
     },
     body: JSON.stringify({
-      model: "gemini-1.5-flash",
+      model: "gemini-3.6-flash",
       body: {
         contents: [
           {
@@ -217,7 +217,7 @@ Use this itinerary and trip details to answer follow-up questions accurately. Do
       "Content-Type": "application/json"
     },
     body: JSON.stringify({
-      model: "gemini-1.5-flash",
+      model: "gemini-3.6-flash",
       body: {
         contents: contents,
         systemInstruction: {

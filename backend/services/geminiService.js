@@ -2,12 +2,12 @@ const API_BASE =
   "https://generativelanguage.googleapis.com/v1beta/models";
 
 const getModel = () =>
-  process.env.GEMINI_MODEL?.trim() || "gemini-1.5-flash";
+  process.env.GEMINI_MODEL?.trim() || "gemini-3.6-flash";
 
 async function callGemini(prompt, schema = null) {
   const key = process.env.GEMINI_API_KEY;
 
-  if (!key || key.includes("PUT_YOUR") || key.startsWith("AQ.Ab8RN")) {
+  if (!key || key.includes("PUT_YOUR")) {
     return null;
   }
 

@@ -90,7 +90,7 @@ export const deleteSavedTrip = async (req, res) => {
 export const proxyGemini = async (req, res) => {
   try {
     const key = process.env.GEMINI_API_KEY;
-    if (!key || key.includes("PUT_YOUR") || key.startsWith("AQ.Ab8RN")) {
+    if (!key || key.includes("PUT_YOUR")) {
       return res.status(400).json({
         success: false,
         message: "Gemini API Key is not set or is invalid on the server backend. Please configure GEMINI_API_KEY in your backend environment."
