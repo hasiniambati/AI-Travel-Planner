@@ -7,7 +7,7 @@ const getModel = () =>
 async function callGemini(prompt, schema = null) {
   const key = process.env.GEMINI_API_KEY;
 
-  if (!key || key.includes("PUT_YOUR")) {
+  if (!key || key.includes("PUT_YOUR") || key.startsWith("AQ.Ab8RN")) {
     return null;
   }
 

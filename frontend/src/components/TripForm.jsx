@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { generateTripWithGemini } from "../services/geminiService";
+import { generateTripWithGemini, saveGeminiApiKey } from "../services/geminiService";
 import "./TripForm.css";
 
 function TripForm({ onTripGenerated }) {
@@ -19,6 +19,14 @@ function TripForm({ onTripGenerated }) {
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [apiKey, setApiKey] = useState(localStorage.getItem("gemini_api_key") || "");
+  const [showKeyConfig, setShowKeyConfig] = useState(!localStorage.getItem("gemini_api_key"));
+
+  const handleApiKeyChange = (e) => {
+    const val = e.target.value;
+    setApiKey(val);
+    saveGeminiApiKey(val);
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -147,6 +155,42 @@ function TripForm({ onTripGenerated }) {
             ⚠️ {error}
           </div>
         )}
+
+        <div className="trip-form-key-section">
+          <h4 style={{ margin: "0 0 8px 0", fontSize: "0.95rem", color: "#334155", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+            <span style={{ fontWeight: 600 }}>🔑 Gemini API Key Settings</span>
+            <button
+              type="button"
+              style={{ background: "none", border: "none", color: "#4f46e5", cursor: "pointer", fontSize: "0.85rem", textDecoration: "underline" }}
+              onClick={() => setShowKeyConfig(!showKeyConfig)}
+            >
+              {showKeyConfig ? "Hide Config" : "Show Config"}
+            </button>
+          </h4>
+          {showKeyConfig && (
+            <div>
+              <input
+                type="password"
+                placeholder="Enter AIzaSy..."
+                value={apiKey}
+                onChange={handleApiKeyChange}
+                style={{
+                  fontFamily: "inherit",
+                  padding: "10px",
+                  fontSize: "0.9rem",
+                  border: "1px solid #cbd5e1",
+                  borderRadius: "8px",
+                  width: "100%",
+                  boxSizing: "border-box",
+                  marginBottom: "8px"
+                }}
+              />
+              <p className="hint" style={{ fontSize: "0.75rem", color: "#64748b", margin: "4px 0 0 0" }}>
+                Get an API key from the <a href="https://aistudio.google.com/" target="_blank" rel="noopener noreferrer" style={{ color: "#4f46e5", textDecoration: "underline" }}>Google AI Studio</a>. Keys are stored locally in your browser.
+              </p>
+            </div>
+          )}
+        </div>
 
         {/* Origin & Destination Row */}
         <div className="grid-2-col">

@@ -69,12 +69,16 @@ const geminiSchema = {
 };
 
 export const getGeminiApiKey = () => {
-  return import.meta.env.VITE_GEMINI_API_KEY || localStorage.getItem("gemini_api_key") || "AQ.Ab8RN6ITVEDWdYMC6si6rubDRp9i8PYBGMzlbrl5hYM3Cq5Zjw";
+  const key = import.meta.env.VITE_GEMINI_API_KEY || localStorage.getItem("gemini_api_key") || "";
+  if (key && (key.startsWith("AQ.Ab8RN") || key.includes("YOUR_API_KEY") || key === "placeholder")) {
+    return "";
+  }
+  return key;
 };
 
 export const saveGeminiApiKey = (key) => {
-  if (key) {
-    localStorage.setItem("gemini_api_key", key);
+  if (key && key.trim()) {
+    localStorage.setItem("gemini_api_key", key.trim());
   } else {
     localStorage.removeItem("gemini_api_key");
   }
